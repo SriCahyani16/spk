@@ -9,6 +9,7 @@ use App\Models\NilaiUtility;
 use App\Models\Penilaian;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Str;
+use DB;
 
 class PenilaianController extends Controller
 {
@@ -17,41 +18,52 @@ class PenilaianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function dashboardSpk()
+    {
+        return view('dashboard-spk');
+    }
+
+
     public function index()
     {
-        $alternatif = Alternatif::with('penilaian')->get();
+
+        $alternatif = Alternatif::get();
+
         $kriteria = Kriteria::get();
 
-        return view('home', compact('alternatif', 'kriteria'));
+        return view('penilaian', compact('alternatif', 'kriteria'));
 
+        // return view('penilaian', ['alternatif' =>$alternatif, 'kriteria' =>$kriteria]);
     }
 
     public function hasilOperasi()
     {
+        dd('request()');
         $arrBobotKriteria = [];
         $kriteria = Kriteria::get();
         $alternatif = Alternatif::get();
-        foreach($kriteria as $e){
-            array_push($arrBobotKriteria, $e->weight/Kriteria::sum('weight'));
+        foreach ($kriteria as $e) {
+            array_push($arrBobotKriteria, $e->weight / Kriteria::sum('weight'));
         }
 
         // Nilai Utility
         NilaiUtility::where('id', '!=', null)->delete();
         $arrMinMax = [];
-        foreach($kriteria as $c){
+        foreach ($kriteria as $c) {
             // var min & max dari c[$i]
             $max = Penilaian::where('kriteria_id', $c->id)->max('score');
             $min = (Penilaian::where('Kriteria_id', $c->id)->count() == 1) ? 0 : Penilaian::where('kriteria_id', $c->id)->min('score');
 
             $isBenefit = ($c->type === 'benefit') ? true : false;
             // for sebanyak a
-            foreach($alternatif as $a){
+            foreach ($alternatif as $a) {
                 // proses utility dari a[$i] pada c[$i]
-                if($isBenefit) {
+                if ($isBenefit) {
                     // rumus benefit
-                    if(Penilaian::where('kriteria_id', $c->id)->where('alternatif_id', $a->id)->count() > 0) {
+                    if (Penilaian::where('kriteria_id', $c->id)->where('alternatif_id', $a->id)->count() > 0) {
                         $u = (Penilaian::where('kriteria_id', $c->id)->where('alternatif_id', $a->id)->first()->score - $min) / ($max - $min);
-                    }else{
+                    } else {
                         $u = 0;
                     }
                     NilaiUtility::create([
@@ -59,11 +71,11 @@ class PenilaianController extends Controller
                         'alternatif_id' => $a->id,
                         'kriteria_id' => $c->id,
                     ]);
-                }else{
+                } else {
                     // rumus cost
-                    if(Penilaian::where('kriteria_id', $c->id)->where('alternatif_id', $a->id)->count() > 0) {
+                    if (Penilaian::where('kriteria_id', $c->id)->where('alternatif_id', $a->id)->count() > 0) {
                         $u = ($max - Penilaian::where('kriteria_id', $c->id)->where('alternatif_id', $a->id)->first()->score) / ($max - $min);
-                    }else{
+                    } else {
                         $u = 0;
                     }
                     NilaiUtility::create([
@@ -79,8 +91,8 @@ class PenilaianController extends Controller
         // Nilai Akhir
         NilaiAkhir::where('id', '!=', null)->delete();
         $nilaiAkhir = 0.0;
-        foreach($alternatif as $a) {
-            foreach($kriteria as $i => $c) {
+        foreach ($alternatif as $a) {
+            foreach ($kriteria as $i => $c) {
                 $nilaiAkhir += $arrBobotKriteria[$i] * NilaiUtility::where('alternatif_id', $a->id)->where('kriteria_id', $c->id)->first()->utility_score;
             }
             NilaiAkhir::create([
@@ -90,38 +102,88 @@ class PenilaianController extends Controller
             $nilaiAkhir = 0;
         }
 
+    }
+
+    public function indexHasil()
+    {
         $data = NilaiAkhir::with('alternatif')->orderBy('nilai_akhir', 'DESC')->get();
 
-        return view('hasil', compact('data'));
+        return view('/hasil', compact('data'));
+    }
+
+    // Fungsi Alternative
+
+    public function indexAlternative()
+    {
+        $alternatif = DB::table('alternatif')->get();
+        return view('index-alternative', compact('alternatif'));
+        //  return view('index-alternative', ['alternatif'=>$alternatif]);
     }
 
     public function showAddAlternative()
     {
-        $kriteria=Kriteria::get();
+        $kriteria = Kriteria::get();
         return view('add-alternative', compact('kriteria'));
     }
 
     public function addAlternative(Request $req)
     {
         $a = Alternatif::create([
+            //$a = DB::table('alternatif')->insert([
             'name' => $req->name,
             'jk' => $req->jk,
             'asalsekolah' => $req->asalsekolah,
             'jurusan' => $req->jurusan
 
         ]);
-
-        foreach(Kriteria::get() as $c){
-            Penilaian::create([
-                'score' => $req->{'score'.$c->id},
-                'alternatif_id' => $a->id,
-                'kriteria_id' => $c->id
-            ]);
-        }
-
-        return redirect('/');
+        return redirect('/index-alternative');
     }
 
+    public function editAlternative($id)
+    {
+        $alternatif = DB::table('alternatif')->where('id', $id)->get();
+        return view('/edit-alternative', ['alternatif' => $alternatif]);
+    }
+
+    public function updateAlternative(Request $request)
+    {
+        $request->validate([
+
+            'name' => 'required',
+            'jk' => 'required',
+            'asalsekolah' => 'required',
+            'jurusan' => 'required'
+        ]);
+        DB::table('alternatif')->where('id', $request->id)->update([
+            'name' => $request->name,
+            'jk' => $request->jk,
+            'asalsekolah' => $request->asalsekolah,
+            'jurusan' => $request->jurusan
+        ]);
+
+        $request->session()->flash('sukses', '
+        <div class="alert alert-succes" role="alert">
+            Data berhasil di ubah
+        </div>
+        ');
+        return redirect('/index-alternative');
+    }
+
+    public function destroyAlternative($id)
+    {
+        DB::table('alternatif')->where('id', $id)->delete();
+        return redirect('/index-alternative');
+    }
+
+
+    // Fungsi Kriteria
+
+    public function indexCriteria()
+    {
+        $kriteria = DB::table('kriteria')->get();
+        return view('index-criteria', compact('kriteria'));
+        //  return view('index-alternative', ['alternatif'=>$alternatif]);
+    }
     public function showAddCriteria()
     {
         return view('add-criteria');
@@ -129,24 +191,50 @@ class PenilaianController extends Controller
 
     public function addCriteria(Request $req)
     {
-        if(Kriteria::where('name', $req->name)->count() > 0) {
-            Kriteria::where('name', $req->name)->delete();
-
-            Kriteria::create([
-                'name' => $req->name,
-                'weight' => $req->weight,
-                'type' => $req->type
-            ]);
-        }else{
-            Kriteria::create([
-                'name' => $req->name,
-                'weight' => $req->weight,
-                'type' => $req->type
-            ]);
-        }
-
-        return redirect('/');
+        Kriteria::create([
+            //   $a = DB::table('kriteria')->insert([
+            'name' => $req->name,
+            'weight' => $req->weight,
+            'type' => $req->type
+        ]);
+        return redirect('/index-criteria');
     }
+
+    public function editCriteria($id)
+    {
+        $kriteria = DB::table('kriteria')->where('id', $id)->get();
+        return view('/edit-criteria', ['kriteria' => $kriteria]);
+    }
+
+    public function updateCriteria(Request $request)
+    {
+        $request->validate([
+
+            'name' => 'required',
+            'weight' => 'required',
+            'type' => 'required'
+
+        ]);
+        DB::table('kriteria')->where('id', $request->id)->update([
+            'name' => $request->name,
+            'weight' => $request->weight,
+            'type' => $request->type
+        ]);
+
+        $request->session()->flash('sukses', '
+        <div class="alert alert-succes" role="alert">
+            Data berhasil di ubah
+        </div>
+        ');
+        return redirect('/index-criteria');
+    }
+
+    public function destroyCriteria($id)
+    {
+        DB::table('kriteria')->where('id', $id)->delete();
+        return redirect('/index-criteria');
+    }
+
 
 
 

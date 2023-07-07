@@ -1,99 +1,53 @@
-<!doctype html>
-<html lang="en">
+@extends('sb-admin/app')
+@section('title','Penilaian')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SPK SMART</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
-</head>
-<style>
-    * {
-        font-family: Poppins;
-    }
-</style>
-<body>
-    <div class="container mt-3">
-        <h1><b>Sistem Pendukung Keputusan</b></h1>
+@section('content')
 
-        <div class="row mt-5">
-            <div class="col">
-                <h2 class="">Alternatif</h2>
-            </div>
-            <div class="col mt-2">
-                <a href="/add-alternative" class="btn btn-sm btn-primary float-end" style="border-radius: 40px;">Add Alternatif</a>
-            </div>
+    <h1 class="h3 mb-4 text-gray-800">Nilai Siswa</h1>
+
+    <form action="/hitung-penilaian" method="POST">
+       @csrf
+       <div class="form-group">
+        @foreach ($alternatif as $item)
+           <label for="nama">Nama</label>
+           <select type="text" class="form-control" id="id" name='name'>
+            <option value=""></option>
+            <option value="{{ $item->id }}">{{ $item->name }}</option> </select>
+           @error('name')
+           <small class="text-danger">{{ $message }}</small>
+           @enderror
+       </div>
+
+           <div class="form-group">
+            <label for="nama">Jurusan</label>
+            <select type="text" class="form-control" id="id" name='jurusan'>
+             <option value=""></option>
+             <option value="{{ $item->id }}">{{ $item->jurusan }}</option> </select>
+            @error('jurusan')
+           <small class="text-danger">{{ $message }}</small>
+           @enderror
+           </div>
+           <div class="form-group">
+           <label for="nama">Asal Sekolah</label>
+            <select type="text" class="form-control" id="id" name='asalsekolah'>
+             <option value=""></option>
+             <option value="{{ $item->id }}">{{ $item->asalsekolah }}</option> </select>
+            @error('name')
+            <small class="text-danger">{{ $message }}</small>
+            @enderror
+        @endforeach
         </div>
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Nama Alternatif</th>
-                    @foreach($kriteria as $c)
-                        <th scope="col">{{ $c->name }}</th>
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($alternatif as $i => $a)
-                <tr>
-                    <th scope="row">{{ ++$i }}</th>
-                    <td>{{ $a->name }}</td>
-                    @foreach($kriteria as $c)
-                        <td>{{ $a->penilaian->where('kriteria_id', $c->id)->first()->score??'0' }}</th>
-                    @endforeach
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <p><b>Masukan Nilai</b></p>
+        @foreach($kriteria as $c)
+            <label for="">{{ $c->name }}</label>
+            <input type="number" name="{{ 'score'. $c->id }}" class="form-control mb-2">
+        @endforeach
 
         <br>
-        <hr>
-
-        <div class="row mt-5">
-            <div class="col">
-                <h2 class="">Kriteria</h2>
-            </div>
-            <div class="col pt-2">
-                <a href="add-criteria" class="btn btn-sm btn-primary float-end" style="border-radius: 40px;">Add Kriteria</a>
-            </div>
-        </div>
-
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Nama Kriteria</th>
-                    <th scope="col">Weight</th>
-                    <th scope="col">Type</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($kriteria as $j => $c)
-                <tr>
-                    <th scope="row">{{ ++$j }}</th>
-                    <td>{{ $c->name }}</td>
-                    <td>{{ $c->weight }}</td>
-                    <td>{{ ucfirst($c->type) }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <br>
-        <br>
-        <center>
-            <a href="/hasil" style="width: 200px;" class="btn btn-dark">Jalankan Operasi</a>
-        </center>
-        <br>
-
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
-    </script>
-</body>
-
-</html>
+           <center>
+               <a href="/hasil" style="width: 200px;" class="btn btn-dark">Simpan Nilai</a>
+           </center>
+           <br>
+     </form>
+@endsection

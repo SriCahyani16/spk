@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class NilaiAkhir extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    protected $table='nilai_akhir';
+    protected $fillable = [
+        'id',
+        'alternatif_id',
+        'nilai_akhir'
+    ];
 
     public function alternatif()
     {

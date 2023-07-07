@@ -7,7 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Alternatif extends Model
 {
-    protected $guarded = [];
+    protected $table='alternatif';
+    protected $fillable = [
+        'id',
+        'name',
+        'jk',
+        'asalsekolah',
+        'jurusan'
+    ];
 
     public function penilaian()
     {

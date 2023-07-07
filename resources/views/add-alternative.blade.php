@@ -1,62 +1,56 @@
+@extends('sb-admin/app')
+@section('title','Alternatif')
 
-<!doctype html>
-<html lang="en">
+@section('content')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MAYDAS SPK</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
-</head>
-<style>
-    * {
-        font-family: Poppins;
-    }
-</style>
-<body>
-    <div class="container mt-3">
+    <h1 class="h3 mb-4 text-gray-800">Tambah Data Alternatif</h1>
 
-        <div class="row">
-            <div class="col-4 offset-4">
-                <h1><b>Add Alternative</b></h1>
-                <form action="/add-alternative" method="post">
-                    @csrf
-                    <label for="">Name</label>
-                    <input type="text" name="name" class="form-control">
-                    <label for="">Jenis Kelamin</label>
-                    <select name="jk" class="form-select" id="">
-                    <option value="benefit">--pilih--</option>
-                    <option value="lk">Laki-Laki</option>
-                    <option value="perempuan">Perempuan</option>
-                    </select>
-                    <label for="">Asal Sekolah</label>
-                    <input type="text" name="name" class="form-control">
-                    <label for="">Jurusan</label>
-                    <select name="jurusan" class="form-select" id="">
-                        <option value="benefit">--pilih--</option>
-                        <option value="tpm">TPM</option>
-                        <option value="tkro">TKRO</option>
-                        <option value="tbsm">TBSM</option>
-                        <option value="tkj">TKJ</option>
-                        <option value="ak">AK</option>
-                        <option value="ekl">EKL</option>
-                    <hr>
-                    <p><b>Score Criteria :</b></p>
-                    @foreach($kriteria as $c)
-                        <label for="">{{ $c->name }}</label>
-                        <input type="number" name="{{ 'score'.$c->id }}" class="form-control mb-2">
-                    @endforeach
-                    <button type="submit" class="btn btn-primary mt-3">Simpan</button>
-                </form>
-            </div>
-        </div>
+    <form action="/add-alternative" method="POST">
+       @csrf
+       <div class="form-group">
+           <label for="nama">Nama</label>
+           <input type="text" class="form-control" id="id" name='name'>
+           @error('name')
+           <small class="text-danger">{{ $message }}</small>
+           @enderror
+       </div>
+       <div class="form-group">
+        <label for="nama">Jenis Kelamin</label>
+       <select class="form-control" aria-label="Default select example" name="jk" id="jk">
+        <option selected>--pilih--</option>
+        <option value="l">Laki-laki</option>
+        <option value="p">Perempuan</option>
+      </select>
+        @error('nama')
+       <small class="text-danger">{{ $message }}</small>
+       @enderror
+       </div>
 
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
-    </script>
-</body>
+            <div class="form-group">
+                <label for="nama">Jurusan</label>
+               <select class="form-control" aria-label="Default select example" name="jurusan" id="jurusan">
+                <option selected>--pilih--</option>
+                <option value="TP">TP</option>
+                <option value="TKR">TKR</option>
+                <option value="TSM">TSM</option>
+                <option value="TKJ">TKJ</option>
+                <option value="AK">AK</option>
+                <option value="TEI">TEI</option>
+              </select>
+                @error('nama')
+               <small class="text-danger">{{ $message }}</small>
+               @enderror
+               </div>
 
-</html>
+               <div class="form-group">
+                <label for="nama">Asal Sekolah</label>
+                <input type="text" class="form-control" id="id" name='asalsekolah'>
+                 @error('asalsekolah')
+                <small class="text-danger">{{ $message }}</small>
+                @enderror
+                </div>
+
+           <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+           <a hef="/add-alternative" class="btn btn-secondary btn-sm">Kembali</a>
+     </form>
+@endsection

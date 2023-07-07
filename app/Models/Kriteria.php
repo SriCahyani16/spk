@@ -10,9 +10,14 @@ use Illuminate\Database\Eloquent\Model;
 class Kriteria extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    protected $table='kriteria';
+    protected $fillable = [
+        'id',
+        'name',
+        'weight',
+        'type'
 
-
+    ];
 
     public function penilaian()
     {
