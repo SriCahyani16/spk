@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Str;
 use DB;
 
+
 class PenilaianController extends Controller
 {
     /**
@@ -37,9 +38,105 @@ class PenilaianController extends Controller
         // return view('penilaian', ['alternatif' =>$alternatif, 'kriteria' =>$kriteria]);
     }
 
-    public function hasilOperasi()
+    public function hasilOperasi(Request $request)
+{
+
+    // Mendapatkan semua data yang diperlukan
+    $alternatif = Alternatif::get();
+    $kriteria = Kriteria::get();
+
+    // Menghitung bobot kriteria
+    $totalBobot = $kriteria->sum('weight');
+    $arrBobotKriteria = $kriteria->map(function ($k) use ($totalBobot) {
+        return $k->weight / $totalBobot;
+    });
+
+    // Menghapus data nilai utility yang sudah ada
+    NilaiUtility::truncate();
+
+    // Menghitung dan menyimpan nilai utility
+    foreach ($kriteria as $k) {
+        $max = Penilaian::where('kriteria_id', $k->id)->max('score');
+        $min = Penilaian::where('kriteria_id', $k->id)->min('score');
+        // $min = (Penilaian::where('kriteria_id', $k->id)->count() == 1) ? 0 : Penilaian::where('kriteria_id', $k->id)->min('score');
+        $isBenefit = ($k->type === 'benefit');
+
+        foreach ($alternatif as $a) {
+            $nilaiPenilaian = Penilaian::where('kriteria_id', $k->id)->where('alternatif_id', $a->id)->value('score');
+
+            if ($max - $min == 0) {
+                $u = 0; // Menghindari pembagian dengan nol
+            } else {
+                if ($isBenefit) {
+                    $u = ($max - $nilaiPenilaian) / ($max - $min);
+                } else {
+                    $u = ($nilaiPenilaian - $min) / ($max - $min);
+                }
+            }
+            /*    if ($isBenefit) {
+                $u = ($nilaiPenilaian - $min) / ($max - $min);
+            } else {
+                $u = ($max - $nilaiPenilaian) / ($max - $min);
+            }
+        */
+
+            NilaiUtility::create([
+                'utility_score' => $u,
+                'alternatif_id' => $a->id,
+                'kriteria_id' => $k->id,
+            ]);
+        }
+    }
+
+    // Menghapus data nilai akhir yang sudah ada
+    NilaiAkhir::truncate();
+
+    // Menghitung dan menyimpan nilai akhir
+   // foreach ($alternatif as $a) {
+    //    $nilaiAkhir = 0.0;
+     //   foreach ($kriteria as $i => $k) {
+         //   $nilaiUtility = NilaiUtility::where('alternatif_id', $a->id)->where('kriteria_id', $k->id)->value('utility_score');
+         //   $nilaiAkhir += $arrBobotKriteria[$i] * $nilaiUtility;
+      //  }
+      // Menghitung dan menyimpan nilai akhir
+    foreach ($alternatif as $a) {
+        $nilaiAkhir = 0.0;
+        foreach ($kriteria as $i => $k) {
+            $nilaiUtility = NilaiUtility::where('alternatif_id', $a->id)->where('kriteria_id', $k->id)->first();
+
+            if ($nilaiUtility) {
+                $nilaiAkhir += $arrBobotKriteria[$i] * $nilaiUtility->utility_score;
+            }
+        }
+        NilaiAkhir::create([
+            'alternatif_id' => $a->id,
+            'nilai_akhir' => $nilaiAkhir
+        ]);
+
+
+    }
+
+    // Redirect atau tampilkan halaman yang diinginkan
+  return redirect('hasil');
+
+
+}
+
+public function indexHasil()
+  {
+      $data = NilaiAkhir::with('alternatif')->orderBy('nilai_akhir', 'DESC')->get();
+
+      return view('hasil', compact('data'));
+  }
+
+
+
+
+
+/*  public function hasilOperasi($request)
     {
-        dd('request()');
+        dd($request);
+
         $arrBobotKriteria = [];
         $kriteria = Kriteria::get();
         $alternatif = Alternatif::get();
@@ -53,7 +150,7 @@ class PenilaianController extends Controller
         foreach ($kriteria as $c) {
             // var min & max dari c[$i]
             $max = Penilaian::where('kriteria_id', $c->id)->max('score');
-            $min = (Penilaian::where('Kriteria_id', $c->id)->count() == 1) ? 0 : Penilaian::where('kriteria_id', $c->id)->min('score');
+            $min = (Penilaian::where('kriteria_id', $c->id)->count() == 1) ? 0 : Penilaian::where('kriteria_id', $c->id)->min('score');
 
             $isBenefit = ($c->type === 'benefit') ? true : false;
             // for sebanyak a
@@ -92,6 +189,7 @@ class PenilaianController extends Controller
         NilaiAkhir::where('id', '!=', null)->delete();
         $nilaiAkhir = 0.0;
         foreach ($alternatif as $a) {
+            $nilaiAkhir = 0.0;
             foreach ($kriteria as $i => $c) {
                 $nilaiAkhir += $arrBobotKriteria[$i] * NilaiUtility::where('alternatif_id', $a->id)->where('kriteria_id', $c->id)->first()->utility_score;
             }
@@ -106,10 +204,12 @@ class PenilaianController extends Controller
 
     public function indexHasil()
     {
-        $data = NilaiAkhir::with('alternatif')->orderBy('nilai_akhir', 'DESC')->get();
+        $data = NilaiAkhir::get();
 
-        return view('/hasil', compact('data'));
+        return view('hasil', compact('data'));
     }
+
+*/
 
     // Fungsi Alternative
 

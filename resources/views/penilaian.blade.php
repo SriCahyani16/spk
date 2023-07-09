@@ -8,45 +8,55 @@
     <form action="/hitung-penilaian" method="POST">
        @csrf
        <div class="form-group">
-        @foreach ($alternatif as $item)
-           <label for="nama">Nama</label>
-           <select type="text" class="form-control" id="id" name='name'>
+        <label for="nama">Nama</label>
+        <select class="form-control" id="name" name='name'>
             <option value=""></option>
-            <option value="{{ $item->id }}">{{ $item->name }}</option> </select>
-           @error('name')
-           <small class="text-danger">{{ $message }}</small>
-           @enderror
-       </div>
+            @foreach ($alternatif as $item)
+            <option value="{{ $item->id }}">{{ $item->name }}</option>
+            @endforeach
+        </select>
+        @error('name')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
 
-           <div class="form-group">
-            <label for="nama">Jurusan</label>
-            <select type="text" class="form-control" id="id" name='jurusan'>
-             <option value=""></option>
-             <option value="{{ $item->id }}">{{ $item->jurusan }}</option> </select>
-            @error('jurusan')
-           <small class="text-danger">{{ $message }}</small>
-           @enderror
-           </div>
-           <div class="form-group">
-           <label for="nama">Asal Sekolah</label>
-            <select type="text" class="form-control" id="id" name='asalsekolah'>
-             <option value=""></option>
-             <option value="{{ $item->id }}">{{ $item->asalsekolah }}</option> </select>
-            @error('name')
-            <small class="text-danger">{{ $message }}</small>
-            @enderror
-        @endforeach
-        </div>
+    <div class="form-group">
+        <label for="jurusan">Jurusan</label>
+        <select class="form-control" id="jurusan" name='jurusan'>
+            <option value=""></option>
+            @foreach ($alternatif as $item)
+            <option value="{{ $item->id }}">{{ $item->jurusan }}</option>
+            @endforeach
+        </select>
+        @error('jurusan')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
+    <div class="form-group">
+        <label for="asalsekolah">Asal Sekolah</label>
+        <select class="form-control" id="asalsekolah" name='asalsekolah'>
+            <option value=""></option>
+            @foreach ($alternatif as $item)
+            <option value="{{ $item->id }}">{{ $item->asalsekolah }}</option>
+            @endforeach
+        </select>
+        @error('asalsekolah')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
 
-        <p><b>Masukan Nilai</b></p>
-        @foreach($kriteria as $c)
-            <label for="">{{ $c->name }}</label>
-            <input type="number" name="{{ 'score'. $c->id }}" class="form-control mb-2">
-        @endforeach
+    <p><b>Masukan Nilai</b></p>
+    @foreach($kriteria as $k)
+    <div class="form-group">
+        <label for="score{{ $k->id }}">{{ $k->name }}</label>
+        <input type="number" class="form-control" id="score{{ $k->id }}" name="{{ 'score'. $k->id }}">
+    </div>
+    @endforeach
+
 
         <br>
            <center>
-               <a href="/hasil" style="width: 200px;" class="btn btn-dark">Simpan Nilai</a>
+               <input type="submit" style="width: 200px;" class="btn btn-dark" value="Simpan Nilai">
            </center>
            <br>
      </form>

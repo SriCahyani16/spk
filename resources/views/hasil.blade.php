@@ -5,7 +5,7 @@
 <body>
     <div class="container mt-5">
 
-        <h2 class="" class="mt-5"><a href="/" style="text-decoration: none;color: black;"></a> <b>Hasil</b></h2>
+        <h2 class="" class="mt-5"><a href="hasil" style="text-decoration: none;color: black;"></a> <b>Hasil</b></h2>
 
         <table class="table table-striped mb-5">
             <thead>
@@ -20,8 +20,8 @@
                 @foreach($data as $i => $d)
                 <tr>
                     <td>{{ $i+1 }}</td>
-                    <td>{{ $d->alternatif->name }}</td>
-                    <td>{{ $d->alternatif->jurusan }}</td>
+                    <td>{{ $d->alternatif->name??"" }}</td>
+                    <td>{{ $d->alternatif->jurusan??"" }}</td>
                     <td>{{ $d->nilai_akhir }}</td>
                 </tr>
                 @endforeach
