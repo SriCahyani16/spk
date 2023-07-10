@@ -50,6 +50,13 @@
                 @enderror
                 </div>
 
+                <p><b>Score Criteria :</b></p>
+                    @foreach($kriteria as $c)
+                        <label for="">{{ $c->name }}</label>
+                        <input type="number" name="{{ 'score'. $c->id }}" class="form-control mb-2">
+                    @endforeach
+
+
            <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
            <a hef="/add-alternative" class="btn btn-secondary btn-sm">Kembali</a>
      </form>
