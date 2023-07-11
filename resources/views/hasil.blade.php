@@ -20,8 +20,8 @@
                 @foreach($data as $i => $d)
                 <tr>
                     <td>{{ $i+1 }}</td>
-                    <td>{{ $d->alternatif->name??"" }}</td>
-                    <td>{{ $d->alternatif->jurusan??"" }}</td>
+                    <td>{{ $d->alternatif->name }}</td>
+                    <td>{{ $d->alternatif->jurusan }}</td>
                     <td>{{ $d->nilai_akhir }}</td>
                 </tr>
                 @endforeach
