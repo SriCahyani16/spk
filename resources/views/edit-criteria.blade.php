@@ -37,7 +37,7 @@
            @enderror
            </div>
 
-           <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+           <button type="submit" class="btn btn-primary btn-sm">Update</button>
            <a hef="/add-criteria" class="btn btn-secondary btn-sm">Kembali</a>
      </form>
      @endforeach

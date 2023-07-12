@@ -37,100 +37,6 @@ class PenilaianController extends Controller
         // return view('penilaian', ['alternatif' =>$alternatif, 'kriteria' =>$kriteria]);
     }
 
-//  /*   public function hasilOperasi(Request $request)
-// {
-
-//     // Mendapatkan semua data yang diperlukan
-//     $alternatif = Alternatif::get();
-//     $kriteria = Kriteria::get();
-
-//     // Menghitung bobot kriteria
-//     $totalBobot = $kriteria->sum('weight');
-//     $arrBobotKriteria = $kriteria->map(function ($k) use ($totalBobot) {
-//         return $k->weight / $totalBobot;
-//     });
-
-//     // Menghapus data nilai utility yang sudah ada
-//     NilaiUtility::truncate();
-
-//     // Menghitung dan menyimpan nilai utility
-//     foreach ($kriteria as $k) {
-//         $max = Penilaian::where('kriteria_id', $k->id)->max('score');
-//         $min = Penilaian::where('kriteria_id', $k->id)->min('score');
-//         // $min = (Penilaian::where('kriteria_id', $k->id)->count() == 1) ? 0 : Penilaian::where('kriteria_id', $k->id)->min('score');
-//         $isBenefit = ($k->type === 'benefit');
-
-//         foreach ($alternatif as $a) {
-//             $nilaiPenilaian = Penilaian::where('kriteria_id', $k->id)->where('alternatif_id', $a->id)->value('score');
-//             dd($nilaiPenilaian);
-//             if ($max - $min == 0) {
-//                 $u = 0; // Menghindari pembagian dengan nol
-//             } else {
-//                 if ($isBenefit) {
-//                     $u = ($max - $nilaiPenilaian) / ($max - $min);
-//                 } else {
-//                     $u = ($nilaiPenilaian - $min) / ($max - $min);
-//                 }
-//             }
-//             // */
-//             //    if ($isBenefit) {
-//             //     $u = ($nilaiPenilaian - $min) / ($max - $min);
-//             // } else {
-//             //     $u = ($max - $nilaiPenilaian) / ($max - $min);
-//             // }
-
-
-//             NilaiUtility::create([
-//                 'utility_score' => $u,
-//                 'alternatif_id' => $a->id,
-//                 'kriteria_id' => $k->id,
-//             ]);
-//         }
-//     }
-
-//     // Menghapus data nilai akhir yang sudah ada
-//     NilaiAkhir::truncate();
-
-//     // Menghitung dan menyimpan nilai akhir
-//     foreach ($alternatif as $a) {
-//         $nilaiAkhir = 0.0;
-//         foreach ($kriteria as $i => $k) {
-//             $nilaiUtility = NilaiUtility::where('alternatif_id', $a->id)->where('kriteria_id', $k->id)->value('utility_score');
-//             $nilaiAkhir += $arrBobotKriteria[$i] * $nilaiUtility;
-//        }
-//       // Menghitung dan menyimpan nilai akhir
-//   /*  foreach ($alternatif as $a) {
-//         $nilaiAkhir = 0.0;
-//         foreach ($kriteria as $i => $k) {
-//             $nilaiUtility = NilaiUtility::where('alternatif_id', $a->id)->where('kriteria_id', $k->id)->first();
-
-//             if ($nilaiUtility) {
-//                 $nilaiAkhir += $arrBobotKriteria[$i] * $nilaiUtility->utility_score;
-//             }
-//         } */
-//         NilaiAkhir::create([
-//             'alternatif_id' => $a->id,
-//             'nilai_akhir' => $nilaiAkhir
-//         ]);
-
-
-//     }
-
-//     // Redirect atau tampilkan halaman yang diinginkan
-//   return redirect('hasil');
-
-
-// }
-
-// public function indexHasil()
-//   {
-//       $data = NilaiAkhir::with('alternatif')->orderBy('nilai_akhir', 'DESC')->get();
-
-//       return view('hasil', compact('data'));
-//   }
-// */
-
-
   public function hasilOperasi()
     {
         $arrBobotKriteria = [];
@@ -197,13 +103,6 @@ class PenilaianController extends Controller
 
     }
 
-    // public function indexHasil()
-    // {
-    //     $data = NilaiAkhir::get();
-
-    //     return view('hasil', compact('data'));
-    // }
-
     // Fungsi Alternative
 
     public function indexAlternative()
@@ -240,7 +139,7 @@ class PenilaianController extends Controller
         }
         // Data berhasil disimpan, berikan pesan alert
         return redirect('/index-alternative')->with('success', 'Data berhasil disimpan.');
-    } catch (\Exception $e) {
+        } catch (\Exception $e) {
         // Data tidak berhasil disimpan, berikan pesan alert
         return redirect('/index-alternative')->with('error', 'Terjadi kesalahan saat menyimpan data.');
     }
@@ -256,6 +155,7 @@ class PenilaianController extends Controller
 
     public function updateAlternative(Request $request)
     {
+        try{
         $request->validate([
 
             'name' => 'required',
@@ -270,12 +170,14 @@ class PenilaianController extends Controller
             'jurusan' => $request->jurusan
         ]);
 
-        $request->session()->flash('sukses', '
-        <div class="alert alert-succes" role="alert">
-            Data berhasil di ubah
-        </div>
-        ');
-        return redirect('/index-alternative');
+            // Data berhasil disimpan, berikan pesan alert
+            return redirect('/index-alternative')->with('success', 'Data berhasil diperbaharui.');
+        } catch (\Exception $e) {
+            // Data tidak berhasil disimpan, berikan pesan alert
+            return redirect('/index-alternative')->with('error', 'Terjadi kesalahan saat memperbaharui data.');
+        }
+
+       // return redirect('/index-alternative');
     }
 
     public function destroyAlternative($id)
@@ -300,6 +202,7 @@ class PenilaianController extends Controller
 
     public function addCriteria(Request $req)
     {
+        try{
         if(Kriteria::where('name', $req->name)->count() > 0) {
             Kriteria::where('name', $req->name)->delete();
 
@@ -316,8 +219,14 @@ class PenilaianController extends Controller
             'type' => $req->type
         ]);
     }
+        // Data berhasil disimpan, berikan pesan alert
+        return redirect('/index-criteria')->with('success', 'Data berhasil disimpan.');
+    } catch (\Exception $e) {
+        // Data tidak berhasil disimpan, berikan pesan alert
+        return redirect('/index-criteria')->with('error', 'Terjadi kesalahan saat menyimpan data.');
+    }
 
-        return redirect('/index-criteria');
+     //   return redirect('/index-criteria');
     }
 
     public function editCriteria($id)
@@ -328,6 +237,7 @@ class PenilaianController extends Controller
 
     public function updateCriteria(Request $request)
     {
+        try{
         $request->validate([
 
             'name' => 'required',
@@ -341,12 +251,14 @@ class PenilaianController extends Controller
             'type' => $request->type
         ]);
 
-        $request->session()->flash('sukses', '
-        <div class="alert alert-succes" role="alert">
-            Data berhasil di ubah
-        </div>
-        ');
-        return redirect('/index-criteria');
+            // Data berhasil disimpan, berikan pesan alert
+            return redirect('/index-criteria')->with('success', 'Data berhasil diperbaharui.');
+        }
+        catch (\Exception $e) {
+            // Data tidak berhasil disimpan, berikan pesan alert
+            return redirect('/index-criteria')->with('error', 'Terjadi kesalahan saat memperbaharui data.');
+        }
+     //   return redirect('/index-criteria');
     }
 
     public function destroyCriteria($id)

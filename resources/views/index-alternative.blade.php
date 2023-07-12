@@ -9,7 +9,7 @@
 
          <a href="/add-alternative" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Alternatif</a>
 
-         <!-- Pemberitahuan sukses dan tidak sukses -->
+        <!-- Pemberitahuan sukses dan tidak sukses -->
             @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}

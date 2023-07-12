@@ -4,8 +4,21 @@
 @section('content')
 
     <h1 class="h3 mb-4 text-gray-800">Edit Data Alternatif</h1>
-    @foreach ($alternatif as $item )
 
+    <!-- Pemberitahuan sukses dan tidak sukses -->
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
+    @foreach ($alternatif as $item )
     <form action="/update-alternative" method="POST">
        @csrf
        <input type="hidden" name="id" value="{{ $item->id }}" >
@@ -50,7 +63,7 @@
                @enderror
                </div>
 
-           <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+           <button type="submit" class="btn btn-primary btn-sm">Update</button>
            <a hef="/add-alternative" class="btn btn-secondary btn-sm">Kembali</a>
      </form>
      @endforeach
