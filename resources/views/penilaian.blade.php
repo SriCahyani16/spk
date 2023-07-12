@@ -4,22 +4,29 @@
 @section('content')
 
 <body>
-    <div class="container mt-3">
-        <h1><b>Form Penilaian Siswa</b></h1>
+    <!-- Pemberitahuan sukses dan tidak sukses -->
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
         <div class="row mt-5">
             <div class="col">
                 <h2 class="">Alternatif</h2>
             </div>
-            <div class="col mt-2">
-                <a href="/add-alternative" class="btn btn-sm btn-primary float-end" style="border-radius: 40px;">Add Alternatif</a>
-            </div>
         </div>
 
-        <table class="table table-striped">
+        <table class="table mt-4 table-hover table-bordered">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">No</th>
                     <th scope="col">Nama Alternatif</th>
                     @foreach($kriteria as $c)
                         <th scope="col">{{ $c->name }}</th>
@@ -46,15 +53,15 @@
             <div class="col">
                 <h2 class="">Kriteria</h2>
             </div>
-            <div class="col pt-2">
+            {{-- <div class="col pt-2">
                 <a href="add-criteria" class="btn btn-sm btn-primary float-end" style="border-radius: 40px;">Add Kriteria</a>
-            </div>
+            </div> --}}
         </div>
 
-        <table class="table table-striped">
+        <table class="table mt-4 table-hover table-bordered">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">No</th>
                     <th scope="col">Nama Kriteria</th>
                     <th scope="col">Weight</th>
                     <th scope="col">Type</th>
@@ -75,13 +82,14 @@
         <br>
         <br>
         <center>
-            <a href="/IndexHasil" style="width: 200px;" class="btn btn-dark">Jalankan Operasi</a>
+            <a href="/hasil" style="width: 200px;" class="btn btn-dark">Hitung Nilai</a>
         </center>
         <br>
 
-    </div>
+
 
 </body>
 
 </html>
+
 @endsection

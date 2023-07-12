@@ -1,5 +1,5 @@
 @extends('sb-admin/app')
-@section('title','Alternatif')
+@section('title','Hasil Akhir')
 
 @section('content')
 <body>
@@ -7,7 +7,7 @@
 
         <h2 class="" class="mt-5"><a href="hasil" style="text-decoration: none;color: black;"></a> <b>Hasil</b></h2>
 
-        <table class="table table-striped mb-5">
+        <table class="table mt-4 table-hover table-bordered">
             <thead>
                 <tr>
                     <th scope="col">Ranking</th>

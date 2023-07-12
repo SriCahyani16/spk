@@ -5,6 +5,19 @@
 
     <h1 class="h3 mb-4 text-gray-800">Tambah Data Alternatif</h1>
 
+    <!-- Pemberitahuan sukses dan tidak sukses -->
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <form action="/add-alternative" method="POST">
        @csrf
        <div class="form-group">
@@ -50,7 +63,7 @@
                 @enderror
                 </div>
 
-                <p><b>Score Criteria :</b></p>
+                <p><b>Masukan Nilai :</b></p>
                     @foreach($kriteria as $c)
                         <label for="">{{ $c->name }}</label>
                         <input type="number" name="{{ 'score'. $c->id }}" class="form-control mb-2">
@@ -58,6 +71,6 @@
 
 
            <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
-           <a hef="/add-alternative" class="btn btn-secondary btn-sm">Kembali</a>
+           <a hef="/penilaian" class="btn btn-secondary btn-sm">Kembali</a>
      </form>
 @endsection

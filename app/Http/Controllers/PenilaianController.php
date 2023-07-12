@@ -29,8 +29,7 @@ class PenilaianController extends Controller
     public function index()
     {
 
-        $alternatif = Alternatif::get();
-
+        $alternatif = Alternatif::with('penilaian')->get();
         $kriteria = Kriteria::get();
 
         return view('penilaian', compact('alternatif', 'kriteria'));
@@ -38,112 +37,108 @@ class PenilaianController extends Controller
         // return view('penilaian', ['alternatif' =>$alternatif, 'kriteria' =>$kriteria]);
     }
 
-    public function hasilOperasi(Request $request)
-{
+//  /*   public function hasilOperasi(Request $request)
+// {
 
-    // Mendapatkan semua data yang diperlukan
-    $alternatif = Alternatif::get();
-    $kriteria = Kriteria::get();
+//     // Mendapatkan semua data yang diperlukan
+//     $alternatif = Alternatif::get();
+//     $kriteria = Kriteria::get();
 
-    // Menghitung bobot kriteria
-    $totalBobot = $kriteria->sum('weight');
-    $arrBobotKriteria = $kriteria->map(function ($k) use ($totalBobot) {
-        return $k->weight / $totalBobot;
-    });
+//     // Menghitung bobot kriteria
+//     $totalBobot = $kriteria->sum('weight');
+//     $arrBobotKriteria = $kriteria->map(function ($k) use ($totalBobot) {
+//         return $k->weight / $totalBobot;
+//     });
 
-    // Menghapus data nilai utility yang sudah ada
-    NilaiUtility::truncate();
+//     // Menghapus data nilai utility yang sudah ada
+//     NilaiUtility::truncate();
 
-    // Menghitung dan menyimpan nilai utility
-    foreach ($kriteria as $k) {
-        $max = Penilaian::where('kriteria_id', $k->id)->max('score');
-        $min = Penilaian::where('kriteria_id', $k->id)->min('score');
-        // $min = (Penilaian::where('kriteria_id', $k->id)->count() == 1) ? 0 : Penilaian::where('kriteria_id', $k->id)->min('score');
-        $isBenefit = ($k->type === 'benefit');
+//     // Menghitung dan menyimpan nilai utility
+//     foreach ($kriteria as $k) {
+//         $max = Penilaian::where('kriteria_id', $k->id)->max('score');
+//         $min = Penilaian::where('kriteria_id', $k->id)->min('score');
+//         // $min = (Penilaian::where('kriteria_id', $k->id)->count() == 1) ? 0 : Penilaian::where('kriteria_id', $k->id)->min('score');
+//         $isBenefit = ($k->type === 'benefit');
 
-        foreach ($alternatif as $a) {
-            $nilaiPenilaian = Penilaian::where('kriteria_id', $k->id)->where('alternatif_id', $a->id)->value('score');
-
-            if ($max - $min == 0) {
-                $u = 0; // Menghindari pembagian dengan nol
-            } else {
-                if ($isBenefit) {
-                    $u = ($max - $nilaiPenilaian) / ($max - $min);
-                } else {
-                    $u = ($nilaiPenilaian - $min) / ($max - $min);
-                }
-            }
-            /*    if ($isBenefit) {
-                $u = ($nilaiPenilaian - $min) / ($max - $min);
-            } else {
-                $u = ($max - $nilaiPenilaian) / ($max - $min);
-            }
-        */
-
-            NilaiUtility::create([
-                'utility_score' => $u,
-                'alternatif_id' => $a->id,
-                'kriteria_id' => $k->id,
-            ]);
-        }
-    }
-
-    // Menghapus data nilai akhir yang sudah ada
-    NilaiAkhir::truncate();
-
-    // Menghitung dan menyimpan nilai akhir
-   // foreach ($alternatif as $a) {
-    //    $nilaiAkhir = 0.0;
-     //   foreach ($kriteria as $i => $k) {
-         //   $nilaiUtility = NilaiUtility::where('alternatif_id', $a->id)->where('kriteria_id', $k->id)->value('utility_score');
-         //   $nilaiAkhir += $arrBobotKriteria[$i] * $nilaiUtility;
-      //  }
-      // Menghitung dan menyimpan nilai akhir
-    foreach ($alternatif as $a) {
-        $nilaiAkhir = 0.0;
-        foreach ($kriteria as $i => $k) {
-            $nilaiUtility = NilaiUtility::where('alternatif_id', $a->id)->where('kriteria_id', $k->id)->first();
-
-            if ($nilaiUtility) {
-                $nilaiAkhir += $arrBobotKriteria[$i] * $nilaiUtility->utility_score;
-            }
-        }
-        NilaiAkhir::create([
-            'alternatif_id' => $a->id,
-            'nilai_akhir' => $nilaiAkhir
-        ]);
+//         foreach ($alternatif as $a) {
+//             $nilaiPenilaian = Penilaian::where('kriteria_id', $k->id)->where('alternatif_id', $a->id)->value('score');
+//             dd($nilaiPenilaian);
+//             if ($max - $min == 0) {
+//                 $u = 0; // Menghindari pembagian dengan nol
+//             } else {
+//                 if ($isBenefit) {
+//                     $u = ($max - $nilaiPenilaian) / ($max - $min);
+//                 } else {
+//                     $u = ($nilaiPenilaian - $min) / ($max - $min);
+//                 }
+//             }
+//             // */
+//             //    if ($isBenefit) {
+//             //     $u = ($nilaiPenilaian - $min) / ($max - $min);
+//             // } else {
+//             //     $u = ($max - $nilaiPenilaian) / ($max - $min);
+//             // }
 
 
-    }
+//             NilaiUtility::create([
+//                 'utility_score' => $u,
+//                 'alternatif_id' => $a->id,
+//                 'kriteria_id' => $k->id,
+//             ]);
+//         }
+//     }
 
-    // Redirect atau tampilkan halaman yang diinginkan
-  return redirect('hasil');
+//     // Menghapus data nilai akhir yang sudah ada
+//     NilaiAkhir::truncate();
+
+//     // Menghitung dan menyimpan nilai akhir
+//     foreach ($alternatif as $a) {
+//         $nilaiAkhir = 0.0;
+//         foreach ($kriteria as $i => $k) {
+//             $nilaiUtility = NilaiUtility::where('alternatif_id', $a->id)->where('kriteria_id', $k->id)->value('utility_score');
+//             $nilaiAkhir += $arrBobotKriteria[$i] * $nilaiUtility;
+//        }
+//       // Menghitung dan menyimpan nilai akhir
+//   /*  foreach ($alternatif as $a) {
+//         $nilaiAkhir = 0.0;
+//         foreach ($kriteria as $i => $k) {
+//             $nilaiUtility = NilaiUtility::where('alternatif_id', $a->id)->where('kriteria_id', $k->id)->first();
+
+//             if ($nilaiUtility) {
+//                 $nilaiAkhir += $arrBobotKriteria[$i] * $nilaiUtility->utility_score;
+//             }
+//         } */
+//         NilaiAkhir::create([
+//             'alternatif_id' => $a->id,
+//             'nilai_akhir' => $nilaiAkhir
+//         ]);
 
 
-}
+//     }
 
-public function indexHasil()
-  {
-      $data = NilaiAkhir::with('alternatif')->orderBy('nilai_akhir', 'DESC')->get();
-
-      return view('hasil', compact('data'));
-  }
+//     // Redirect atau tampilkan halaman yang diinginkan
+//   return redirect('hasil');
 
 
+// }
+
+// public function indexHasil()
+//   {
+//       $data = NilaiAkhir::with('alternatif')->orderBy('nilai_akhir', 'DESC')->get();
+
+//       return view('hasil', compact('data'));
+//   }
+// */
 
 
-
-/*  public function hasilOperasi($request)
+  public function hasilOperasi()
     {
-        dd($request);
-
         $arrBobotKriteria = [];
         $kriteria = Kriteria::get();
         $alternatif = Alternatif::get();
         foreach ($kriteria as $e) {
             array_push($arrBobotKriteria, $e->weight / Kriteria::sum('weight'));
         }
-
         // Nilai Utility
         NilaiUtility::where('id', '!=', null)->delete();
         $arrMinMax = [];
@@ -151,7 +146,6 @@ public function indexHasil()
             // var min & max dari c[$i]
             $max = Penilaian::where('kriteria_id', $c->id)->max('score');
             $min = (Penilaian::where('kriteria_id', $c->id)->count() == 1) ? 0 : Penilaian::where('kriteria_id', $c->id)->min('score');
-
             $isBenefit = ($c->type === 'benefit') ? true : false;
             // for sebanyak a
             foreach ($alternatif as $a) {
@@ -183,8 +177,6 @@ public function indexHasil()
                 }
             }
         }
-
-
         // Nilai Akhir
         NilaiAkhir::where('id', '!=', null)->delete();
         $nilaiAkhir = 0.0;
@@ -199,17 +191,18 @@ public function indexHasil()
             ]);
             $nilaiAkhir = 0;
         }
-
-    }
-
-    public function indexHasil()
-    {
-        $data = NilaiAkhir::get();
+        $data = NilaiAkhir::with('alternatif')->orderBy('nilai_akhir', 'DESC')->get();
 
         return view('hasil', compact('data'));
+
     }
 
-*/
+    // public function indexHasil()
+    // {
+    //     $data = NilaiAkhir::get();
+
+    //     return view('hasil', compact('data'));
+    // }
 
     // Fungsi Alternative
 
@@ -228,6 +221,7 @@ public function indexHasil()
 
     public function addAlternative(Request $req)
     {
+        try{
         $a = Alternatif::create([
             //$a = DB::table('alternatif')->insert([
             'name' => $req->name,
@@ -236,7 +230,22 @@ public function indexHasil()
             'jurusan' => $req->jurusan
 
         ]);
-        return redirect('/index-alternative');
+
+        foreach(Kriteria::get() as $c){
+            Penilaian::create([
+                'score' => $req->{'score'.$c->id},
+                'alternatif_id' => $a->id,
+                'kriteria_id' => $c->id
+            ]);
+        }
+        // Data berhasil disimpan, berikan pesan alert
+        return redirect('/index-alternative')->with('success', 'Data berhasil disimpan.');
+    } catch (\Exception $e) {
+        // Data tidak berhasil disimpan, berikan pesan alert
+        return redirect('/index-alternative')->with('error', 'Terjadi kesalahan saat menyimpan data.');
+    }
+
+       // return redirect('/index-alternative');
     }
 
     public function editAlternative($id)
@@ -291,12 +300,23 @@ public function indexHasil()
 
     public function addCriteria(Request $req)
     {
+        if(Kriteria::where('name', $req->name)->count() > 0) {
+            Kriteria::where('name', $req->name)->delete();
+
         Kriteria::create([
             //   $a = DB::table('kriteria')->insert([
             'name' => $req->name,
             'weight' => $req->weight,
             'type' => $req->type
         ]);
+    }else{
+        Kriteria::create([
+            'name' => $req->name,
+            'weight' => $req->weight,
+            'type' => $req->type
+        ]);
+    }
+
         return redirect('/index-criteria');
     }
 

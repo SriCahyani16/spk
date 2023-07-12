@@ -1,5 +1,5 @@
 @extends('sb-admin/app')
-@section('title','Alternatif')
+@section('title','Kriteria')
 
 @section('content')
     {{-- flashdata --}}

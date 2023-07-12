@@ -21,8 +21,6 @@ Route::get('/', function () {
     return view('welcome');
 }) ;
 
-
-
 Route::get('/dashboard-spk', [PenilaianController::class, 'dashboardSpk']);
 Route::get('/index-alternative', [PenilaianController::class, 'indexAlternative']);
 Route::get('/index-criteria', [PenilaianController::class, 'indexCriteria']);
@@ -32,11 +30,10 @@ Route::post('/add-alternative', [PenilaianController::class, 'addAlternative']);
 Route::get('/edit-alternative/{id}', [PenilaianController::class, 'editAlternative']);
 Route::get('/hapus-alternative/{id}', [PenilaianController::class, 'destroyAlternative']);
 Route::post('/update-alternative', [PenilaianController::class, 'updateAlternative']);
-Route::post('/hitung-penilaian', [PenilaianController::class, 'hasilOperasi']);
-Route::get('/hasil', [PenilaianController::class, 'indexHasil']);
+//Route::post('/hitung-penilaian', [PenilaianController::class, 'hasilOperasi']);
+Route::get('/hasil', [PenilaianController::class, 'hasilOperasi']);
 
 Route::get('/penilaian', [PenilaianController::class,'index']);
-
 Route::get('/add-criteria', [PenilaianController::class, 'showAddCriteria']);
 Route::post('/add-criteria', [PenilaianController::class, 'addCriteria']);
 Route::get('/edit-criteria/{id}', [PenilaianController::class, 'editCriteria']);

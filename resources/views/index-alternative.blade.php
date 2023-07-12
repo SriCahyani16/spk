@@ -9,6 +9,19 @@
 
          <a href="/add-alternative" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Alternatif</a>
 
+         <!-- Pemberitahuan sukses dan tidak sukses -->
+            @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
          <!--Table-->
          <table class="table mt-4 table-hover table-bordered">
             <thead>

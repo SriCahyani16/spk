@@ -4,7 +4,20 @@
 @section('content')
 
 
-    <h1 class="h3 mb-4 text-gray-800">Tambah Kriteria</h1>
+   <h1 class="h3 mb-4 text-gray-800">Tambah Kriteria</h1>
+
+   <!-- Pemberitahuan sukses dan tidak sukses -->
+        @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
 
     <form action="/add-criteria" method="POST">
        @csrf
