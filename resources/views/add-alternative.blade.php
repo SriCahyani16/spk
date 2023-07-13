@@ -3,7 +3,7 @@
 
 @section('content')
 
-    <h1 class="h3 mb-4 text-gray-800">Tambah Data Alternatif</h1>
+    <h1 class="h3 mb-13 text-gray-800">Tambah Data Alternatif</h1>
 
     <!-- Pemberitahuan sukses dan tidak sukses -->
     @if(session('success'))

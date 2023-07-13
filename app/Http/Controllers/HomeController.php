@@ -36,4 +36,9 @@ class HomeController extends Controller
     {
         return view('/dashboard-spk');
     }
+
+    public function userHome()
+    {
+        return view('/dashboard-spk');
+    }
 }

@@ -21,24 +21,11 @@ Route::get('/', function () {
     return view('welcome');
 }) ;
 
-Route::get('/dashboard-spk', [PenilaianController::class, 'dashboardSpk']);
-Route::get('/index-alternative', [PenilaianController::class, 'indexAlternative']);
-Route::get('/index-criteria', [PenilaianController::class, 'indexCriteria']);
 
-Route::get('/add-alternative', [PenilaianController::class, 'showAddAlternative']);
-Route::post('/add-alternative', [PenilaianController::class, 'addAlternative']);
-Route::get('/edit-alternative/{id}', [PenilaianController::class, 'editAlternative']);
-Route::get('/hapus-alternative/{id}', [PenilaianController::class, 'destroyAlternative']);
-Route::post('/update-alternative', [PenilaianController::class, 'updateAlternative']);
-//Route::post('/hitung-penilaian', [PenilaianController::class, 'hasilOperasi']);
 Route::get('/hasil', [PenilaianController::class, 'hasilOperasi']);
-
 Route::get('/penilaian', [PenilaianController::class,'index']);
-Route::get('/add-criteria', [PenilaianController::class, 'showAddCriteria']);
-Route::post('/add-criteria', [PenilaianController::class, 'addCriteria']);
-Route::get('/edit-criteria/{id}', [PenilaianController::class, 'editCriteria']);
-Route::get('/hapus-criteria/{id}', [PenilaianController::class, 'destroyCriteria']);
-Route::post('/update-criteria', [PenilaianController::class, 'updateCriteria']);
+Route::get('/dashboard-spk', [PenilaianController::class, 'dashboardSpk']);
+
 
 // Route::post('/penilaian', [PenilaianController::class, 'index']);
 //Route::get('/index-alternative', [PenilaianController::class, 'indexAlternative']);
@@ -50,20 +37,36 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 Route::middleware(['auth', 'user-access:admin'])->group(function () {
 
+    Route::get('/index-criteria', [PenilaianController::class, 'indexCriteria']);
+    Route::get('/add-criteria', [PenilaianController::class, 'showAddCriteria']);
+    Route::post('/add-criteria', [PenilaianController::class, 'addCriteria']);
+    Route::get('/edit-criteria/{id}', [PenilaianController::class, 'editCriteria']);
+    Route::get('/hapus-criteria/{id}', [PenilaianController::class, 'destroyCriteria']);
+    Route::post('/update-criteria', [PenilaianController::class, 'updateCriteria']);
     Route::get('/admin/home', [HomeController::class, 'adminHome'])->name('admin.home');
     Route::get('/dashboard', function () {
     return view('sb-admin/app');
+    });
+
+
+
 });
+
+
 
 Route::middleware(['auth', 'user-access:user'])->group(function () {
 
+    Route::get('/index-alternative', [PenilaianController::class, 'indexAlternative']);
+    Route::get('/add-alternative', [PenilaianController::class, 'showAddAlternative']);
+    Route::post('/add-alternative', [PenilaianController::class, 'addAlternative']);
+    Route::get('/edit-alternative/{id}', [PenilaianController::class, 'editAlternative']);
+    Route::get('/hapus-alternative/{id}', [PenilaianController::class, 'destroyAlternative']);
+    Route::post('/update-alternative', [PenilaianController::class, 'updateAlternative']);
+    Route::get('/user/home', [HomeController::class, 'userHome'])->name('user.home');
+
+
     //  Route::resource('/penilaian', PenilaianController::class);
 });
-
-
-
-});
-
 
 
 
