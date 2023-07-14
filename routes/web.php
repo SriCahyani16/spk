@@ -67,6 +67,9 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
 
     //  Route::resource('/penilaian', PenilaianController::class);
 });
+Route::get('/check_auth', function ()  {
+    return Auth::user();
+});
 
 
 

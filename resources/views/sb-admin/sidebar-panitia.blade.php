@@ -18,32 +18,21 @@
             <span>Dashboard</span></a>
     </li>
 
-
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-    @if (Auth::user()->type=="admin")
+    <!-- Nav Item - Pages Collapse Menu -->
+
+
+    <!-- Nav Item - Utilities Collapse Menu -->
+
+
     <!-- Nav Item - Tables -->
     <li class="nav-item active">
-        <a class="nav-link" href="/index-criteria">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Kriteria</span></a>
-    </li>
-
-    <li class="nav-item active">
-        <a class="nav-link" href="/index-criteria">
-            <i class="fas fa-fw fa-table"></i>
-            <span>User Access</span></a>
-    </li>
-
-    @elseif (Auth::user()->type=="user")
-    <li class="nav-item active">
         <a class="nav-link" href="/index-alternative">
-            <i class="fas fsa-fw fa-table"></i>
+            <i class="fas fa-fw fa-table"></i>
             <span>Alternatif</span></a>
     </li>
-
-    @endif
 
     <li class="nav-item active">
         <a class="nav-link" href="/penilaian">

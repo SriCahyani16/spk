@@ -50,14 +50,17 @@ class PenilaianController extends Controller
         foreach ($kriteria as $e) {
             array_push($arrBobotKriteria, $e->weight / Kriteria::sum('weight'));
         }
+
         // Nilai Utility
         NilaiUtility::where('id', '!=', null)->delete();
         $arrMinMax = [];
+
         foreach ($kriteria as $c) {
             // var min & max dari c[$i]
             $max = Penilaian::where('kriteria_id', $c->id)->max('score');
             $min = (Penilaian::where('kriteria_id', $c->id)->count() == 1) ? 0 : Penilaian::where('kriteria_id', $c->id)->min('score');
             $isBenefit = ($c->type === 'benefit') ? true : false;
+
             // for sebanyak a
             foreach ($alternatif as $a) {
                 // proses utility dari a[$i] pada c[$i]
@@ -88,13 +91,15 @@ class PenilaianController extends Controller
                 }
             }
         }
+
         // Nilai Akhir
         NilaiAkhir::where('id', '!=', null)->delete();
-        $nilaiAkhir = 0.0;
-        foreach ($alternatif as $a) {
+            $nilaiAkhir = 0.0;
+            foreach ($alternatif as $a) {
             $nilaiAkhir = 0.0;
             foreach ($kriteria as $i => $c) {
-                $nilaiAkhir += $arrBobotKriteria[$i] * NilaiUtility::where('alternatif_id', $a->id)->where('kriteria_id', $c->id)->first()->utility_score;
+                $nilaiAkhir += $arrBobotKriteria[$i] * NilaiUtility::where('alternatif_id', $a->id)
+                ->where('kriteria_id', $c->id)->first()->utility_score;
             }
             NilaiAkhir::create([
                 'alternatif_id' => $a->id,
@@ -102,6 +107,7 @@ class PenilaianController extends Controller
             ]);
             $nilaiAkhir = 0;
         }
+        
         $data = NilaiAkhir::with('alternatif')->orderBy('nilai_akhir', 'DESC')->get();
 
         return view('hasil', compact('data'));
@@ -109,7 +115,6 @@ class PenilaianController extends Controller
     }
 
     // Fungsi Alternative
-
     public function indexAlternative()
     {
         $alternatif = DB::table('alternatif')->get();
@@ -191,9 +196,7 @@ class PenilaianController extends Controller
         return redirect('/index-alternative');
     }
 
-
     // Fungsi Kriteria
-
     public function indexCriteria()
     {
         $kriteria = DB::table('kriteria')->get();
