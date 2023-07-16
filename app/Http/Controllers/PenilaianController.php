@@ -107,7 +107,7 @@ class PenilaianController extends Controller
             ]);
             $nilaiAkhir = 0;
         }
-        
+
         $data = NilaiAkhir::with('alternatif')->orderBy('nilai_akhir', 'DESC')->get();
 
         return view('hasil', compact('data'));
@@ -190,6 +190,14 @@ class PenilaianController extends Controller
        // return redirect('/index-alternative');
     }
 
+    public function jumlahAlternative()
+{
+    $jumlahAlternative = Alternatif::count();
+
+    return view('/dashboard-spk', compact('jumlahAlternative'));
+}
+
+
     public function destroyAlternative($id)
     {
         DB::table('alternatif')->where('id', $id)->delete();
@@ -269,13 +277,31 @@ class PenilaianController extends Controller
      //   return redirect('/index-criteria');
     }
 
+    public function jumlahCriteria()
+    {
+        $jumlahCriteria = Kriteria::count();
+
+        return view('/dashboard-spk', compact('jumlahCriteria'));
+    }
+
     public function destroyCriteria($id)
     {
         DB::table('kriteria')->where('id', $id)->delete();
         return redirect('/index-criteria');
     }
 
+    public function search(Request $request)
+{
+    $search = $request->input('search');
+    $alternatif = Alternatif::with('penilaian')
+        ->where('name', 'LIKE', "%$search%")
+        ->orWhere('asalsekolah', 'LIKE', "%$search%")
+        ->orWhere('jurusan', 'LIKE', "%$search%")
+        ->get();
+    $kriteria = Kriteria::get();
 
+    return view('penilaian', compact('alternatif', 'kriteria'));
+}
 
 
     /**

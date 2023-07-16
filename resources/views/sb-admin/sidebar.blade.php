@@ -30,12 +30,6 @@
             <span>Kriteria</span></a>
     </li>
 
-    <li class="nav-item active">
-        <a class="nav-link" href="/index-criteria">
-            <i class="fas fa-fw fa-table"></i>
-            <span>User Access</span></a>
-    </li>
-
     @elseif (Auth::user()->type=="user")
     <li class="nav-item active">
         <a class="nav-link" href="/index-alternative">
