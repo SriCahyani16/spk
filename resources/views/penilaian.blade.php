@@ -17,10 +17,12 @@
         </div>
     @endif
 
-        <!-- Page Heading -->
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Alternatif</h1>
-        </div>
+         <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Alternatif</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i>Cetak Data</a>
+    </div>
 
         <table class="table mt-4 table-hover table-bordered">
             <thead>
@@ -49,9 +51,6 @@
             <div class="col">
                 <h2 class="h3 mb-0 text-gray-800">Kriteria</h2>
             </div>
-            {{-- <div class="col pt-2">
-                <a href="add-criteria" class="btn btn-sm btn-primary float-end" style="border-radius: 40px;">Add Kriteria</a>
-            </div> --}}
         </div>
 
         <table class="table mt-4 table-hover table-bordered">

@@ -321,7 +321,7 @@ class PenilaianController extends Controller
     //     return redirect('/index-user')->with('error', 'Terjadi kesalahan saat menyimpan data.');
     // }
 
-      return redirect('/index-user');
+     return redirect('/index-user');
     }
 
     public function editUser($id)

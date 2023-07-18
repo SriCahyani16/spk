@@ -25,6 +25,7 @@ Route::get('/', function () {
 
 Route::get('/hasil', [PenilaianController::class, 'hasilOperasi']);
 Route::get('/penilaian', [PenilaianController::class,'index']);
+Route::get('/search', [PenilaianController::class, 'search'])->name('search');
 Route::get('/dashboard-spk', [PenilaianController::class, 'dashboardSpk']);
 
 
@@ -54,6 +55,7 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
 
     Route::post('/dashboard-spk',[PenilaianController::class,'jumlahAlternative']);
     Route::post('/dashboard-spk',[PenilaianController::class,'jumlahCriteria']);
+    Route::post('/dashboard-spk',[PenilaianController::class,'jumlahUser']);
 
     Route::get('/admin/home', [HomeController::class, 'adminHome'])->name('admin.home');
     Route::get('/dashboard', function () {
