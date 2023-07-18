@@ -30,6 +30,12 @@
             <span>Kriteria</span></a>
     </li>
 
+    <li class="nav-item active">
+        <a class="nav-link" href="/index-user">
+            <i class="fas fa-fw fa-user"></i>
+            <span>User</span></a>
+    </li>
+
     @elseif (Auth::user()->type=="user")
     <li class="nav-item active">
         <a class="nav-link" href="/index-alternative">

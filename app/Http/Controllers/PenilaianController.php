@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Alternatif;
 use App\Models\Kriteria;
 use App\Models\NilaiAkhir;
@@ -9,8 +8,9 @@ use App\Models\NilaiUtility;
 use App\Models\Penilaian;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Str;
+use App\Models\User;
 use DB;
-
+use Illuminate\Support\Facades\Hash;
 
 class PenilaianController extends Controller
 {
@@ -204,7 +204,7 @@ class PenilaianController extends Controller
         return redirect('/index-alternative');
     }
 
-    // Fungsi Kriteria
+    // Fungsi User
     public function indexCriteria()
     {
         $kriteria = DB::table('kriteria')->get();
@@ -290,18 +290,100 @@ class PenilaianController extends Controller
         return redirect('/index-criteria');
     }
 
-    public function search(Request $request)
-{
-    $search = $request->input('search');
-    $alternatif = Alternatif::with('penilaian')
-        ->where('name', 'LIKE', "%$search%")
-        ->orWhere('asalsekolah', 'LIKE', "%$search%")
-        ->orWhere('jurusan', 'LIKE', "%$search%")
-        ->get();
-    $kriteria = Kriteria::get();
 
-    return view('penilaian', compact('alternatif', 'kriteria'));
-}
+    // Fungsi User
+    public function indexUser()
+    {
+        $users = DB::table('users')->get();
+        return view('index-user', compact('users'));
+        //  return view('index-alternative', ['alternatif'=>$alternatif]);
+    }
+    public function showAddUser()
+    {
+        return view('add-user');
+    }
+
+    public function addUser(Request $req)
+    {
+      //  try{
+        {
+        User::create([
+            'name' => $req->name,
+            'email' => $req->email,
+            'password' => Hash::make($req->password),
+            'type' => $req->type
+        ]);
+        }
+        // Data berhasil disimpan, berikan pesan alert
+       // return redirect('/index-user')->with('success', 'Data berhasil disimpan.');
+    // } catch (\Exception $e) {
+    //     // Data tidak berhasil disimpan, berikan pesan alert
+    //     return redirect('/index-user')->with('error', 'Terjadi kesalahan saat menyimpan data.');
+    // }
+
+      return redirect('/index-user');
+    }
+
+    public function editUser($id)
+    {
+        $users = DB::table('users')->where('id', $id)->get();
+        return view('/edit-user', ['users' => $users]);
+    }
+
+    public function updateUser(Request $request)
+    {
+        try{
+        $request->validate([
+
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'type' => 'required'
+
+        ]);
+        DB::table('users')->where('id', $request->id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
+            'type' => $request->type
+        ]);
+
+            // Data berhasil disimpan, berikan pesan alert
+            return redirect('/index-user')->with('success', 'Data berhasil diperbaharui.');
+        }
+        catch (\Exception $e) {
+            // Data tidak berhasil disimpan, berikan pesan alert
+            return redirect('/index-user')->with('error', 'Terjadi kesalahan saat memperbaharui data.');
+        }
+     //   return redirect('/index-criteria');
+    }
+
+    public function jumlahUser()
+    {
+        $jumlahUser = User::count();
+
+        return view('/dashboard-spk', compact('jumlahUser'));
+    }
+
+    public function destroyUser($id)
+    {
+        DB::table('users')->where('id', $id)->delete();
+        return redirect('/index-user');
+    }
+
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+        $alternatif = Alternatif::with('penilaian')
+            ->where('name', 'LIKE', "%$search%")
+            ->orWhere('asalsekolah', 'LIKE', "%$search%")
+            ->orWhere('jurusan', 'LIKE', "%$search%")
+            ->get();
+        $kriteria = Kriteria::get();
+
+        return view('penilaian', compact('alternatif', 'kriteria'));
+    }
 
 
     /**

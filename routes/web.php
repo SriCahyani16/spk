@@ -38,21 +38,23 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 Route::middleware(['auth', 'user-access:admin'])->group(function () {
 
-    Route::get('/index-user', [PenilaianController::class, 'indexCriteria']);
     Route::get('/index-criteria', [PenilaianController::class, 'indexCriteria']);
     Route::get('/add-criteria', [PenilaianController::class, 'showAddCriteria']);
     Route::post('/add-criteria', [PenilaianController::class, 'addCriteria']);
     Route::get('/edit-criteria/{id}', [PenilaianController::class, 'editCriteria']);
     Route::get('/hapus-criteria/{id}', [PenilaianController::class, 'destroyCriteria']);
     Route::post('/update-criteria', [PenilaianController::class, 'updateCriteria']);
+
+    Route::get('/index-user', [PenilaianController::class, 'indexUser']);
+    Route::get('/add-user', [PenilaianController::class, 'showAddUser']);
+    Route::post('/add-user', [PenilaianController::class, 'addUser']);
+    Route::get('/edit-user/{id}', [PenilaianController::class, 'editUser']);
+    Route::get('/hapus-user/{id}', [PenilaianController::class, 'destroyUser']);
+    Route::post('/update-user', [PenilaianController::class, 'updateUser']);
+
     Route::post('/dashboard-spk',[PenilaianController::class,'jumlahAlternative']);
     Route::post('/dashboard-spk',[PenilaianController::class,'jumlahCriteria']);
-    // Route::post('/panitia/create', [PanitiaController::class, 'create'])->name('panitia.create');
-    // Route::get('/panitia/create', [PanitiaController::class, 'showCreateForm'])->name('panitia.create');
 
-    // Route::get('/panitia/registrasi', function () {
-    //     return view('/panitia.create');
-    // });
     Route::get('/admin/home', [HomeController::class, 'adminHome'])->name('admin.home');
     Route::get('/dashboard', function () {
     return view('sb-admin/app');

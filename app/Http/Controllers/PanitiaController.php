@@ -6,6 +6,7 @@ use App\Models\Panitia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+
 class PanitiaController extends Controller
 {
     public function create(Request $request)
