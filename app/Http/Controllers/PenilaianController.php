@@ -115,6 +115,7 @@ class PenilaianController extends Controller
     }
 
     // Fungsi Alternative
+
     public function indexAlternative()
     {
         $alternatif = DB::table('alternatif')->get();
