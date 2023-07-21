@@ -16,8 +16,6 @@
             </div>
         @endif
 
-            
-
         @if(session('error'))
             <div class="alert alert-danger">
                 {{ session('error') }}
@@ -40,8 +38,7 @@
             <tbody>
                 @foreach ($alternatif as $row )
                 <tr>
-                    <td>{{$loop->iteration}}</td>
-
+                    <td>{{ $alternatif->perPage() * ($alternatif->currentPage() - 1) + $loop->index + 1 }}</td>
                     <td>{{$row->name}}</td>
                     <td>{{$row->jk}}</td>
                     <td>{{$row->asalsekolah}}</td>
@@ -59,5 +56,6 @@
             </tbody>
           </table>
 
+            {{$alternatif->links()}}
 
 @endsection

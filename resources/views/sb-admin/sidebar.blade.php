@@ -19,10 +19,16 @@
     </li>
 
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
 
     @if (Auth::user()->type=="admin")
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+          Admin Management
+      </div>
     <!-- Nav Item - Tables -->
     <li class="nav-item active">
         <a class="nav-link" href="/index-criteria">
@@ -36,7 +42,15 @@
             <span>User</span></a>
     </li>
 
+
     @elseif (Auth::user()->type=="user")
+     <!-- Divider -->
+     <hr class="sidebar-divider">
+
+     <!-- Heading -->
+     <div class="sidebar-heading">
+         Panitia Management
+     </div>
     <li class="nav-item active">
         <a class="nav-link" href="/index-alternative">
             <i class="fas fsa-fw fa-table"></i>
@@ -44,11 +58,18 @@
     </li>
 
     @endif
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Penilaian
+    </div>
 
     <li class="nav-item active">
         <a class="nav-link" href="/penilaian">
             <i class="fas fa-fw fa-book"></i>
-            <span>Penilaian</span></a>
+            <span>Perhitungan</span></a>
     </li>
     <li class="nav-item active">
         <a class="nav-link" href="/hasil">
@@ -59,7 +80,7 @@
 
 
     <!-- Divider -->
-    <hr class="sidebar-divider">
+
 
     <!-- Heading -->
 
@@ -71,6 +92,9 @@
 
 
     <!-- Nav Item - Tables -->
+
+
+    <!-- Nav Item - Utilities Collapse Menu -->
 
 
     <!-- Divider -->

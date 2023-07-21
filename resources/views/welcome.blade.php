@@ -50,7 +50,7 @@
                   <div class="image_2"><img src="{{ asset('landing/images/img-2.png')}}"></div>
                </div>
                <div class="col-md-6">
-                  <h1 class="about_taital">About<span class="us_text">Us</span></h1>
+                  <h1 class="about_taital">Sistem Pendukung Keputusan<span class="us_text">Penerimaan Siswa Baru</span></h1>
                   <p class="about_text">Simple Multi Attribute Rating Technique (SMART) adalah sebuah metode yang digunakan untuk membantu pengambilan keputusan dengan cara melakukan perbandingan antara beberapa alternatif berdasarkan beberapa kriteria atau atribut yang telah ditetapkan sebelumnya. Metode ini membantu memperjelas proses pengambilan keputusan dengan mengkonversi data kualitatif dan kuantitatif menjadi nilai numerik yang dapat dibandingkan. </p>
                   <div class="read_bt_1"><a href="{{ route('login') }}">Login</a></div>
                </div>

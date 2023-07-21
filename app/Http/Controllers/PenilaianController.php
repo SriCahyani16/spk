@@ -118,7 +118,7 @@ class PenilaianController extends Controller
 
     public function indexAlternative()
     {
-        $alternatif = DB::table('alternatif')->get();
+        $alternatif = DB::table('alternatif')->simplepaginate(10);
         return view('index-alternative', compact('alternatif'));
         //  return view('index-alternative', ['alternatif'=>$alternatif]);
     }
