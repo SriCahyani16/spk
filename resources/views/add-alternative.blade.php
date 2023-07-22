@@ -31,8 +31,8 @@
         <label for="nama">Jenis Kelamin</label>
        <select class="form-control" aria-label="Default select example" name="jk" id="jk">
         <option selected>--pilih--</option>
-        <option value="l">Laki-laki</option>
-        <option value="p">Perempuan</option>
+        <option value="L">Laki-laki</option>
+        <option value="P">Perempuan</option>
       </select>
         @error('nama')
        <small class="text-danger">{{ $message }}</small>

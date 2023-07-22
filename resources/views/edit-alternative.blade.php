@@ -51,12 +51,12 @@
                 <label for="nama">Jurusan</label>
                <select class="form-control" aria-label="Default select example" name="jurusan" id="jurusan" value="{{ $item->jurusan }}">
                 <option selected>--pilih--</option>
-                <option value="tpm">TPM</option>
-                <option value="tkro">TKRO</option>
-                <option value="tbsm">TBSM</option>
-                <option value="tkj">TKJ</option>
-                <option value="ak">AK</option>
-                <option value="tei">TEI</option>
+                <option value="TP">TP</option>
+                <option value="TKR">TKR</option>
+                <option value="TSM">TSM</option>
+                <option value="TKJ">TKJ</option>
+                <option value="AK">AK</option>
+                <option value="TEI">TEI</option>
               </select>
                 @error('nama')
                <small class="text-danger">{{ $message }}</small>

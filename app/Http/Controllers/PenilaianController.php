@@ -118,7 +118,7 @@ class PenilaianController extends Controller
 
     public function indexAlternative()
     {
-        $alternatif = DB::table('alternatif')->simplepaginate(10);
+        $alternatif = DB::table('alternatif')->simplepaginate(50);
         return view('index-alternative', compact('alternatif'));
         //  return view('index-alternative', ['alternatif'=>$alternatif]);
     }
@@ -306,7 +306,7 @@ class PenilaianController extends Controller
 
     public function addUser(Request $req)
     {
-      //  try{
+      try{
         {
         User::create([
             'name' => $req->name,
@@ -315,12 +315,12 @@ class PenilaianController extends Controller
             'type' => $req->type
         ]);
         }
-        // Data berhasil disimpan, berikan pesan alert
-       // return redirect('/index-user')->with('success', 'Data berhasil disimpan.');
-    // } catch (\Exception $e) {
-    //     // Data tidak berhasil disimpan, berikan pesan alert
-    //     return redirect('/index-user')->with('error', 'Terjadi kesalahan saat menyimpan data.');
-    // }
+        //Data berhasil disimpan, berikan pesan alert
+       return redirect('/index-user')->with('success', 'Data berhasil disimpan.');
+        } catch (\Exception $e) {
+            // Data tidak berhasil disimpan, berikan pesan alert
+            return redirect('/index-user')->with('error', 'Terjadi kesalahan saat menyimpan data.');
+        }
 
      return redirect('/index-user');
     }
@@ -333,19 +333,17 @@ class PenilaianController extends Controller
 
     public function updateUser(Request $request)
     {
-        try{
+         try{
         $request->validate([
 
             'name' => 'required',
             'email' => 'required',
-            'password' => 'required',
             'type' => 'required'
 
         ]);
         DB::table('users')->where('id', $request->id)->update([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
             'type' => $request->type
         ]);
 
@@ -356,7 +354,7 @@ class PenilaianController extends Controller
             // Data tidak berhasil disimpan, berikan pesan alert
             return redirect('/index-user')->with('error', 'Terjadi kesalahan saat memperbaharui data.');
         }
-     //   return redirect('/index-criteria');
+       // return redirect('/index-user');
     }
 
     public function jumlahUser()

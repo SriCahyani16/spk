@@ -10,7 +10,9 @@
          <a href="/add-user" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i>User</a>
 
         <!-- Pemberitahuan sukses dan tidak sukses -->
-        @if(session('success'))
+        {{-- @if(session('success'))
+        <br>
+        <br>
             <div class="alert alert-success">
                  {{ session('success') }}
             </div>
@@ -20,7 +22,7 @@
             <div class="alert alert-danger">
                 {{ session('error') }}
             </div>
-        @endif
+        @endif --}}
 
          <!--Table-->
          <table class="table mt-4 table-hover table-bordered">

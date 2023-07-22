@@ -8,9 +8,10 @@
          <h1 class="h3 mb-4 text-gray-800">Alternatif</h1>
 
          <a href="/add-alternative" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Alternatif</a>
-
         <!-- Pemberitahuan sukses dan tidak sukses -->
             @if(session('success'))
+            <br>
+            <br>
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>

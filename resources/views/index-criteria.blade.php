@@ -11,6 +11,8 @@
 
         <!-- Pemberitahuan sukses dan tidak sukses -->
         @if(session('success'))
+        <br>
+        <br>
             <div class="alert alert-success">
                  {{ session('success') }}
             </div>
