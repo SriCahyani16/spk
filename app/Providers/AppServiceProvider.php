@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-//use Maatwebsite\Excel\ExcelServiceProvider;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -15,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-      //  $this->app->register(ExcelServiceProvider::class);
+        
     }
 
     /**

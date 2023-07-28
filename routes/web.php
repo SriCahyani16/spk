@@ -24,6 +24,7 @@ Route::get('/', function () {
 
 
 Route::get('/hasil', [PenilaianController::class, 'hasilOperasi']);
+Route::get('/pdf-hasil', [PenilaianController::class, 'cetakPdf']);
 Route::get('/penilaian', [PenilaianController::class,'index']);
 Route::get('/search', [PenilaianController::class, 'search'])->name('search');
 Route::get('/dashboard-spk', [PenilaianController::class, 'dashboardSpk']);
@@ -74,7 +75,9 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
     Route::get('/hapus-alternative/{id}', [PenilaianController::class, 'destroyAlternative']);
     Route::post('/update-alternative', [PenilaianController::class, 'updateAlternative']);
     Route::get('/user/home', [HomeController::class, 'userHome'])->name('user.home');
-
+    Route::get('/dashboard', function () {
+        return view('sb-admin/app');
+        });
 
     //  Route::resource('/penilaian', PenilaianController::class);
 });

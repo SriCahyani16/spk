@@ -9,8 +9,10 @@ use App\Models\Penilaian;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Str;
 use App\Models\User;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use DB;
 use Illuminate\Support\Facades\Hash;
+use PDF;
 
 class PenilaianController extends Controller
 {
@@ -291,7 +293,6 @@ class PenilaianController extends Controller
         return redirect('/index-criteria');
     }
 
-
     // Fungsi User
     public function indexUser()
     {
@@ -384,6 +385,20 @@ class PenilaianController extends Controller
         return view('penilaian', compact('alternatif', 'kriteria'));
     }
 
+    public function cetakPdf()
+{
+	//$nilaiakhir = NilaiAkhir::orderBy('nilai_akhir', 'desc')->get();
+
+    $nilaiakhir = NilaiAkhir::with('alternatif')->orderBy('nilai_akhir', 'desc')->get();
+    if ($nilaiakhir->isEmpty()) {
+
+        // Lakukan penanganan jika data kosong, misalnya redirect atau tampilkan pesan.
+        return redirect()->back()->with('error', 'Data nilai akhir tidak ditemukan.');
+    }
+	//$pdf = PDF::loadview('pdf-hasil',['nilaiakhir'=>$nilaiakhir]);
+	$pdf = PDF::loadView('pdf-hasil', ['nilaiakhir'=>$nilaiakhir]);
+    return $pdf->stream();
+}
 
     /**
      * Show the form for creating a new resource.
