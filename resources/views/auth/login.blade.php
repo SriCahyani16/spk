@@ -22,11 +22,16 @@
             <div class="card-body p-5 text-center">
 
               <div class="mb-md-5 mt-md-4 pb-5">
+                @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+                @endif
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
 
-                      </button>
+                    </button>
                     </div>
 
                 <h2 class="fw-bold mb-2 text-uppercase">Login</h2>

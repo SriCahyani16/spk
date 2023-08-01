@@ -13,7 +13,7 @@
 	</style>
 	<center>
 		<h5>HASIL TES PENERIMAAN SISWA BARU <br> SMK PGRI JATIBARANG</h4>
-		</center>
+	</center>
 <br>
 	<table class='table table-bordered'>
 		<thead>
